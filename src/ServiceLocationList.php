@@ -16,7 +16,6 @@ final class ServiceLocationList
 			$this->request = $request
 				->setOptions("locations")
 				->setOptions($location_type);
-
 		} catch (ServiceRequestException $e) {
 			throw new ServiceLocationListException($e->getMessage());
 		}
@@ -25,9 +24,11 @@ final class ServiceLocationList
 	public function __invoke()
 	{
 		try {
-			$response['body'] = json_decode($this->request->send()->getBody(), true);
+			$response = $this->request
+				->send()
+				->getBody();
 
-			return $response;
+			return json_decode(response, true);
 		} catch (ServiceRequestException $e) {
 			throw new ServiceLocationListException($e->getMessage());
 		}

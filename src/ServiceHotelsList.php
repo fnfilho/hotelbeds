@@ -4,21 +4,24 @@ namespace StayForLong\HotelBeds;
 
 final class ServiceHotelsList
 {
-	private $response;
+	private $request;
 
 	/**
 	 * @param ServiceRequest $request
 	 */
 	public function __construct(ServiceRequest $request)
 	{
-		$this->response = $request->setOptions("hotels")->send();
+		$this->request = $request->setOptions("hotels");
 	}
 
 	public function __invoke()
 	{
 		try {
-			$response = $this->response->getBody();
-			return json_decode( $response, true);
+			$response = $this->request
+				->send()
+				->getBody();
+
+			return json_decode($response, true);
 		} catch (ServiceRequestException $e) {
 			throw new ServiceHotelsListException($e->getMessage());
 		}
